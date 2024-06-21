@@ -8,7 +8,7 @@ fn main() {
         match stream {
             Ok(mut stream) => {
                 println!("accepted new connection");
-                let _ = stream.write("HTTP/1.1 200 OK\r\n\r\n");
+                let _ = stream.write(b"HTTP/1.1 200 OK\r\n\r\n");
             }
             Err(e) => {
                 println!("error: {}", e);
