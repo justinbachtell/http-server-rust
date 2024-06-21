@@ -32,6 +32,17 @@ fn handle_connection(mut stream: TcpStream) {
                     new_parts[2].len(),
                     new_parts[2]
                 );
+            } else if _default.contains("/user-agent") {
+                let header = http_request
+                    .iter()
+                    .find(|line| line.contains("User-Agent"))
+                    .unwrap();
+                let new_parts = header.split(" ").collect::<Vec<&str>>();
+                response = format!(
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\n{}",
+                    new_parts[1].len(),
+                    new_parts[1]
+                );
             } else {
                 response = String::from("HTTP/1.1 404 Not Found\r\n\r\n");
             }
