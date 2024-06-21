@@ -20,14 +20,22 @@ fn handle_connection(mut stream: TcpStream) {
         .map(|result| result.unwrap())
         .take_while(|line| !line.is_empty())
         .collect();
-
-    let request = http_request[0].split(" ").collect::<Vec<&str>>();
-    let http_response = match request[1] {
-        "/" => "200 OK",
-        _ => "404 Not Found",
+    let parts = http_request[0].split(" ").collect::<Vec<&str>>();
+    let response: String;
+    match parts[1] {
+        "/" => response = String::from("HTTP/1.1 200 OK\r\n\r\n"),
+        _default => {
+            if _default.contains("/echo") {
+                let new_parts = _default.split("/").collect::<Vec<&str>>();
+                response = format!(
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\n{}",
+                    new_parts[2].len(),
+                    new_parts[2]
+                );
+            } else {
+                response = String::from("HTTP/1.1 404 Not Found\r\n\r\n");
+            }
+        }
     };
-
-    let response = format!("HTTP/1.1 {}\r\n\r\n", http_response);
-
-    stream.write_all(response.as_bytes()).unwrap();
+    stream.write(response.as_bytes()).unwrap();
 }
