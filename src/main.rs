@@ -4,7 +4,7 @@ use std::{
 };
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:4221").unwrap();
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -24,7 +24,7 @@ fn handle_connection(mut stream: TcpStream) {
     let request = http_request[0].split(" ").collect::<Vec<&str>>();
     let http_response = match request[1] {
         "/" => "200 OK",
-        _ => "404 NOT FOUND",
+        _ => "404 Not Found",
     };
 
     let response = format!("HTTP/1.1 {}\r\n\r\n", http_response);
