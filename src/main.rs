@@ -27,7 +27,7 @@ fn handle_connection(mut stream: TcpStream) {
         _ => "404 NOT FOUND",
     };
 
-    let response = format!("HTTP/1.1 {}\r\n\r\n", http_response);:
+    let response = format!("HTTP/1.1 {}\r\n\r\n", http_response);
 
     stream.write_all(response.as_bytes()).unwrap();
 }
